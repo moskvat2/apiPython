@@ -97,7 +97,7 @@ async def delete_artigo(artigo_id: int,
     async with db as session:
         query = select(ArtigoModel).filter(ArtigoModel.id == artigo_id).filter(ArtigoModel.usuario_id == usuario_logado.id)
         result = await session.execute(query)
-        artigo_up: ArtigoModel = result.scalars().unique().one_or_none()
+        artigo_del: ArtigoModel = result.scalars().unique().one_or_none()
     
     if artigo_del:
         await session.delete(artigo_del)

@@ -14,6 +14,13 @@ from core.security import gerar_hash_senha
 from core.auth import autenticar, criar_token_acesso
 
 
+    # Bypass warning
+from sqlmodel.sql.expression import Select, SelectOfScalar
+
+SelectOfScalar.inherit_cache = True
+Select.inherit_cache = True
+
+
 router = APIRouter()
 
 
@@ -35,7 +42,7 @@ async def post_usuario(usuario: UsuarioSchemaCreate, db: AsyncSession = Depends(
     async with db as session:
         session.add(novo_usuario)
         await session.commit()
-        
+
         return novo_usuario
     
     
@@ -70,7 +77,7 @@ async def put_usuario(usuario_id: int, usuario: UsuarioSchemaUp, db: AsyncSessio
     async with db as session:
         query = select(UsuarioModel).filter(UsuarioModel.id == usuario_id)
         result = await session.execute(query)
-        usuario: UsuarioSchemaBase = result.scalars().unique().one_or_none()
+        usuario_up: UsuarioSchemaBase = result.scalars().unique().one_or_none()
         
         if usuario_up:
             if usuario.nome:
@@ -101,7 +108,7 @@ async def delete_usuario(usuario_id: int, db: AsyncSession = Depends(get_session
     async with db as session:
         query = select(UsuarioModel).filter(UsuarioModel.id == usuario_id)
         result = await session.execute(query)
-        usuario: UsuarioSchemaArtigos = result.scalars().unique().one_or_none()
+        usuario_del: UsuarioSchemaArtigos = result.scalars().unique().one_or_none()
         
         if usuario_del:
             await session.delete(usuario_del)

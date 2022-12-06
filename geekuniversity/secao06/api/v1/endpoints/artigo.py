@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import APIRouter, status, Depends, HTTPException, Response
 
-from sqlalchemy.ext.asyncio import async_session
+from sqlalchemy.ext.asyncio import async_session, AsyncSession
 from sqlalchemy.future import select
 
 from models.artigo_model import ArtigoModel
@@ -61,7 +61,7 @@ async def get_artigo(artigo_id: int, db: AsyncSession = Depends(get_session)):
 @router.put('/{artigo_id}', response_model=ArtigoSchema, status_code=status.HTTP_202_ACCEPTED)
 async def put_artigo(artigo_id: int,
                      artigo: ArtigoSchema,
-                     db: AsyncSession = Depends(get_session),
+                     db: AsyncSession = Depends(get_session), 
                      usuario_logado: UsuarioModel = Depends(get_current_user)):
     async with db as session:
         query = select(ArtigoModel).filter(ArtigoModel.id == artigo_id)
@@ -92,7 +92,7 @@ async def put_artigo(artigo_id: int,
 # DELETE Artigo
 @router.delete('/{artigo_id}', status_code=status.HTTP_204_NO_CONTENT)
 async def delete_artigo(artigo_id: int,
-                     db: AsyncSession = Depends(get_session),
+                     db: AsyncSession = Depends(get_session), 
                      usuario_logado: UsuarioModel = Depends(get_current_user)):
     async with db as session:
         query = select(ArtigoModel).filter(ArtigoModel.id == artigo_id).filter(ArtigoModel.usuario_id == usuario_logado.id)

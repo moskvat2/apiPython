@@ -5,7 +5,7 @@ from core.configs import settings
 
 
 class UsuarioModel(settings.DBBaseModel):
-    __tablename__ = 'usuarios'
+    __tablename__: str = 'usuarios'
     
     id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String(256), nullable=True)

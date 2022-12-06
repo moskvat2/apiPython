@@ -5,7 +5,7 @@ from core.configs import settings
 
 
 class ArtigoModel(settings.DBBaseModel):
-    __tablename__ = 'artigos'
+    __tablename__: str = 'artigos'
     
     id = Column(Integer, primary_key=True, autoincrement=True)
     titulo = Column(String(256))

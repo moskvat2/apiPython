@@ -4,7 +4,7 @@ from core.configs import settings
 from api.v1.api import api_route
 
 
-app = FastAPI(title='Cursos API - FastAPI SQL Model - Buddy CICD')
+app = FastAPI(title='Cursos API - FastAPI SQL Model - Buddy CICD - 2022')
 app.include_router(api_route, prefix=settings.API_V1_STR) # return constant /api/v1
 
 

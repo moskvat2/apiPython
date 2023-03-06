@@ -48,6 +48,7 @@ def sendCommand(updateType):
     print("2) Atualizar Check Service")
     print("3) Bloquear Aplicação Web")
     print("4) Liberar Aplicação Web")
+    print("5) Forçar Recovery Wildfly")
     print("0) Voltar ao Início\n")
 
     option = int(input("Selecione uma das opções acima: "))
@@ -60,10 +61,18 @@ def sendCommand(updateType):
             command = "echo `hostname ; curl -O http://office.bsit-br.com.br:3635/gp-implantacao/check_service.sh ; ls -lh check_service.sh `"
             update(updateType, command)
         case 3:
-            command = "echo `iptables -t filter -I INPUT 1 -p tcp -m multiport --dport 80,443 -j DROP ` "
+            command = "echo `iptables -t filter -I INPUT 1 -p tcp -m multiport --dport 80,443 -j DROP ; \
+                systemctl disable --now crond ` "
             update(updateType, command)
         case 4:
-            command = "echo `iptables -t filter -D INPUT 1 `"
+            command = "echo `iptables -t filter -D INPUT 1 ; \
+                systemctl enable --now crond `"
+            update(updateType, command)
+        case 5:
+            command = "pp=`pgrep java` ; kill -9 $pp ; rm -f /opt/java/wildfly/standalone/deployments/*.failed ; \
+                rm -rf /tmp/* ; rm -rf /opt/java/wildfly/standalone/tmp/iss-integration-ws.war/* ;  \
+                rm -rf /opt/java/wildfly/standalone/tmp/pm-web-service.war/* ;  \
+                rm -rf /opt/java/wildfly/standalone/tmp/public-management-web-front-end.war/* ; reboot `"
             update(updateType, command)
         case 0:
             return #exit()
